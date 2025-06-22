@@ -1,125 +1,144 @@
-# Product Catalogue Microservice
+# 🛍️ Product Catalogue Microservice
 
-This is a Spring Boot–based Product Catalogue service built with:
+A complete microservice built using **Spring Boot**, fully **containerized with Docker**, deployed via **Kubernetes**, and version-controlled with **Git tags & CI/CD** pipelines.
 
-- Java + Spring Boot
-- Docker (containerized for multiple versions)
-- Kubernetes (multi-version deployments)
-- GitHub Actions (CI/CD)
-- H2 In-Memory Database
+---
+
+## 🔧 Tech Stack
+
+- 🚀 Spring Boot (RESTful API)
+- 🐳 Docker (Multi-version container images)
+- ☸️ Kubernetes (Minikube)
+- 🔀 GitHub (Git tags for versioning)
+- 🔄 GitHub Actions (CI/CD automation)
+- 🗄️ H2 In-Memory Database
 
 ---
 
 ## 🚀 Features by Version
 
-| Version | Features |
-|---------|----------|
-| v1.0.0  | Basic CRUD (GET, POST, PUT, DELETE) for `/products` |
-| v1.1.0  | Search by product name → `/products/search?name=mouse` |
-| v2.0.0  | Filter by price → `/products/filter?minPrice=100&maxPrice=500` |
+| Version | Features                                                                 |
+|---------|--------------------------------------------------------------------------|
+| `v1.0.0` | Basic CRUD for `/products`                                              |
+| `v1.1.0` | Search products by name → `/products/search?name=mouse`                |
+| `v2.0.0` | Filter products by price → `/products/filter?minPrice=100&maxPrice=500`|
 
 ---
 
-## 🐳 Docker Usage
+## 🐳 Docker Instructions
 
-### Build Image
+### 📦 Build Docker Image
 ```bash
 docker build -t product-catalogue .
+````
 
+### ▶️ Run Locally
 
-
-Run Container
-
+```bash
 docker run -p 9090:9090 product-catalogue
+```
 
+### 📤 Docker Hub Images
 
-Docker Hub Images
-v1.0.0
+* `yogeshwarsaini/product-catalogue:v1.0.0`
+* `yogeshwarsaini/product-catalogue:v1.1.0`
+* `yogeshwarsaini/product-catalogue:v2.0.0`
 
-yogeshwarsaini/product-catalogue:v1.1.0
+To pull and run any version:
 
-yogeshwarsaini/product-catalogue:v2.0.0
+```bash
+docker pull yogeshwarsaini/product-catalogue:v1.1.0
+docker run -p 9090:9090 yogeshwarsaini/product-catalogue:v1.1.0
+```
 
-☸ Kubernetes Deployment
-Start minikube
+---
 
-bash
-Copy code
+## ☸️ Kubernetes Deployment
+
+### ✅ Step-by-Step
+
+```bash
 minikube start
-Apply manifests
 
-bash
-Copy code
 kubectl apply -f k8s/v1/
 kubectl apply -f k8s/v1.1/
 kubectl apply -f k8s/v2/
 kubectl apply -f k8s/ingress.yaml
-Run tunnel
 
-bash
-Copy code
 minikube tunnel
-Access:
+```
 
-bash
-Copy code
-http://localhost/v1/products
-http://localhost/v1.1/products/search?name=mouse
-http://localhost/v2/products/filter?minPrice=100&maxPrice=500
+---
 
+## 🌐 Access APIs via Ingress
 
-🧪 Sample API (via Postman)
-http
-Copy code
+| Version | URL Example                                                                                                                     |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| v1.0.0  | [http://localhost/v1/products](http://localhost/v1/products)                                                                    |
+| v1.1.0  | [http://localhost/v1.1/products/search?name=mouse](http://localhost/v1.1/products/search?name=mouse)                            |
+| v2.0.0  | [http://localhost/v2/products/filter?minPrice=100\&maxPrice=500](http://localhost/v2/products/filter?minPrice=100&maxPrice=500) |
+
+---
+
+## 🔍 Sample API (Test via Postman)
+
+```http
 GET /products
 GET /products/search?name=mouse
 GET /products/filter?minPrice=200&maxPrice=1000
-yaml
-Copy code
+```
 
 ---
 
-## ✅ 2. `SYSTEM_DESIGN.md`
+## 🧠 System Design Overview
 
-```markdown
-# System Design: Product Catalogue Microservice
+### 🔧 Architecture Components
 
----
-
-## 📦 Architecture Overview
-
-- REST API using Spring Boot
-- Containerized using Docker
-- Deployed using Kubernetes (Minikube)
-- Routed via Ingress paths (`/v1`, `/v1.1`, `/v2`)
-- CI/CD enabled using GitHub Actions
+| Component       | Description                               |
+| --------------- | ----------------------------------------- |
+| Spring Boot App | Java microservice with REST endpoints     |
+| Docker          | Containerized build per version           |
+| Kubernetes      | Manages versioned deployments             |
+| Ingress         | Routes `/v1`, `/v1.1`, `/v2` to right pod |
+| Docker Hub      | Stores versioned images                   |
+| GitHub Actions  | Automates Docker build & push on tag push |
 
 ---
 
-## 🧱 Components
+### 🔁 Versioning Logic
 
-| Component      | Description                            |
-|----------------|----------------------------------------|
-| Spring Boot App | Java microservice for product CRUD     |
-| Docker         | Image for each version (v1.0, v1.1, v2) |
-| Kubernetes     | Deployments, Services & Ingress        |
-| GitHub         | Version control + CI/CD                |
-| Docker Hub     | Stores all tagged container versions   |
+* Each version (`v1.0.0`, `v1.1.0`, `v2.0.0`) is a **Git tag**
+* Feature added → Git tag created → Docker image pushed
+* Deployed separately via Kubernetes and routed by Ingress
 
 ---
 
-## 🔁 Versioning Logic
+### 🌐 Ingress Path Routing
 
-- Git tags created for `v1.0.0`, `v1.1.0`, `v2.0.0`
-- Features added incrementally
-- Docker image tagged and pushed per version
+| Path    | Routed To                 |
+| ------- | ------------------------- |
+| `/v1`   | product-catalogue\:v1.0.0 |
+| `/v1.1` | product-catalogue\:v1.1.0 |
+| `/v2`   | product-catalogue\:v2.0.0 |
 
 ---
 
-## 🌐 Ingress Routing
+## ✅ Project is READY for Deployment, Testing & Demo 🚀
 
-| Path         | Routes to Version |
-|--------------|-------------------|
-| `/v1`        | product-catalogue:v1.0.0 |
-| `/v1.1`      | product-catalogue:v1.1.0 |
-| `/v2`        | product-catalogue:v2.0.0 |
+* ✅ Dockerized per version
+* ✅ Kubernetes deployed via manifests
+* ✅ CI/CD workflow (optional: `.github/workflows/ci-cd.yaml`)
+* ✅ H2 console: `http://localhost:9090/h2-console` (dev mode only)
+
+---
+
+## 👨‍💻 Author
+
+Yogeshwar Saini
+contact :- 9958847153
+gmail   :- yogismash123@gmail.com
+
+> GitHub: [yogeshwarsaini](https://github.com/yogeshwarsaini)
+> Docker Hub: [yogeshwarsaini](https://hub.docker.com/u/yogeshwarsaini)
+
+---
